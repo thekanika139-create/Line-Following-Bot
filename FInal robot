@@ -1,0 +1,178 @@
+const int SENSOR_LEFT_OUT = A0;   // Outer Left
+const int SENSOR_LEFT_IN = A1;    // Inner Left
+const int SENSOR_CENTER = A2;     // Center
+const int SENSOR_RIGHT_IN = A3;   // Inner Right
+const int SENSOR_RIGHT_OUT = A4;  // Outer Right
+
+
+const int MOTOR_A_PWM = 9;   // Left Motor Speed  
+const int MOTOR_A_DIR = 8;   // Left Motor Direction  
+const int MOTOR_B_PWM = 10;  // Right Motor Speed  
+const int MOTOR_B_DIR = 11;  // Right Motor Direction
+
+  
+float Kp = 15.0;   
+float Ki = 0.01;  
+float Kd = 20.0; 
+
+  
+const int BASE_SPEED = 120; // Max speed is typically 255 for analogWrite
+
+  
+int sensorValues[5];
+
+  
+long lastError = 0;  
+float integral = 0;
+
+  
+void setup() {
+     
+    pinMode(MOTOR_A_PWM, OUTPUT);  
+    pinMode(MOTOR_A_DIR, OUTPUT);  
+    pinMode(MOTOR_B_PWM, OUTPUT);  
+    pinMode(MOTOR_B_DIR, OUTPUT);
+
+     
+    pinMode(SENSOR_LEFT_OUT, INPUT);
+    
+
+      
+    Serial.begin(9600);
+   
+}
+
+
+  
+void setMotors(int leftSpeed, int rightSpeed) {
+     
+    leftSpeed = constrain(leftSpeed, -255, 255);  
+    rightSpeed = constrain(rightSpeed, -255, 255);
+
+     
+    if (leftSpeed >= 0) {  
+        digitalWrite(MOTOR_A_DIR, HIGH); // Forward  
+    } else {  
+        digitalWrite(MOTOR_A_DIR, LOW);  // Backward/Brake
+    }  
+analogWrite(MOTOR_A_PWM, abs(leftSpeed));
+
+      
+if (rightSpeed >= 0) {  
+        digitalWrite(MOTOR_B_DIR, HIGH); // Forward   
+} else {  
+        digitalWrite(MOTOR_B_DIR, LOW);  // Backward/Brake
+    }  
+       analogWrite(MOTOR_B_PWM, abs(rightSpeed));
+}  
+
+
+long calculateError() {  
+    sensorValues[0] = digitalRead(SENSOR_LEFT_OUT);  
+    sensorValues[1] = digitalRead(SENSOR_LEFT_IN);  
+    sensorValues[2] = digitalRead(SENSOR_CENTER);  
+    sensorValues[3] = digitalRead(SENSOR_RIGHT_IN);  
+    sensorValues[4] = digitalRead(SENSOR_RIGHT_OUT);
+
+     
+    int s_in[5];  
+    for (int i = 0; i < 5; i++) {  
+         s_in[i] = 1 - sensorValues[i]; // 1 if on line, 0 if off line
+    }
+
+      
+    long error_sum = (s_in[0] * -4) + (s_in[1] * -2) + (s_in[2] * 0) + (s_in[3] * 2) + (s_in[4] * 4);
+
+     
+    int active_sensors = s_in[0] + s_in[1] + s_in[2] + s_in[3] + s_in[4];
+
+      
+    if (active_sensors == 0) {
+       
+        return lastError > 0 ? 10 : -10; // Simple drift correction
+    }
+  
+   if (active_sensors >= 4) {
+          
+             return 0; 
+    }
+
+    
+
+    return error_sum;
+}
+  
+void handleJunction(int s0, int s1, int s2, int s3, int s4) {
+     
+   if ((s4 == 0 && s3 == 0) && s0 == 1) { 
+        setMotors(-BASE_SPEED, BASE_SPEED); 
+        delay(200);
+        while (digitalRead(SENSOR_CENTER) == 1) {
+            setMotors(-BASE_SPEED, BASE_SPEED);
+           
+        }
+        return;
+    }
+    
+   
+    if ((s0 == 0 && s1 == 0 && s2 == 0 && s3 == 0) || (s0 == 0 && s1 == 0 && s2 == 0 && s3 == 0 && s4 == 0)) {
+        
+        setMotors(BASE_SPEED, BASE_SPEED);
+        delay(100);
+        
+       
+        setMotors(BASE_SPEED, -BASE_SPEED);
+        delay(300);
+
+        
+        setMotors(BASE_SPEED, BASE_SPEED);
+        delay(200); 
+    }
+}
+
+
+void loop() {
+    
+    long error = calculateError();
+    
+    
+    int s0 = digitalRead(SENSOR_LEFT_OUT);
+    int s1 = digitalRead(SENSOR_LEFT_IN);
+    int s2 = digitalRead(SENSOR_CENTER);
+    int s3 = digitalRead(SENSOR_RIGHT_IN);
+    int s4 = digitalRead(SENSOR_RIGHT_OUT);
+
+    if ((s0 == 0 && s1 == 0 && s2 == 0) || (s2 == 0 && s3 == 0 && s4 == 0) || (s0 == 0 && s4 == 0)) {
+       
+        handleJunction(s0, s1, s2, s3, s4);
+        return; 
+    }
+    
+   
+    float proportional = error * Kp;
+
+  
+    integral += error;
+    integral = constrain(integral, -100, 100); 
+    float integralTerm = integral * Ki;
+
+    
+    long derivative = error - lastError;
+    float derivativeTerm = derivative * Kd;
+
+  
+    float steering = proportional + integralTerm + derivativeTerm;
+
+   
+    int leftSpeed = BASE_SPEED - steering;
+    int rightSpeed = BASE_SPEED + steering;
+nt
+    setMotors(leftSpeed, rightSpeed);
+
+   
+    lastError = error;
+
+    
+}
+
+}
