@@ -42,21 +42,17 @@ void setup()
   //This sets frequecny as 7812.5 hz.
   TCCR0B = TCCR0B & B11111000 | B00000010 ;
   
-  // put your setup code here, to run once:
-  pinMode(enableRightMotor, OUTPUT);
-  pinMode(rightMotorPin1, OUTPUT);
-  pinMode(rightMotorPin2, OUTPUT);
-  
-  pinMode(enableLeftMotor, OUTPUT);
-  pinMode(leftMotorPin1, OUTPUT);
-  pinMode(leftMotorPin2, OUTPUT);
-
-  pinMode(IR_SENSOR_RIGHT, INPUT);
-  pinMode(IR_SENSOR_LEFT, INPUT);
+  // put your setup code here, to run once:  
+  pinMode(enableRightMotor, OUTPUT);  
+  pinMode(rightMotorPin1, OUTPUT);  
+  pinMode(rightMotorPin2, OUTPUT);  
+  pinMode(enableLeftMotor, OUTPUT);  
+  pinMode(leftMotorPin1, OUTPUT);  
+  pinMode(leftMotorPin2, OUTPUT);      
+  pinMode(IR_SENSOR_RIGHT, INPUT);  
+  pinMode(IR_SENSOR_LEFT, INPUT);  
   rotateMotor(0,0);   
-}
-
-
+}  
 void loop()
 {
 
@@ -122,8 +118,8 @@ void rotateMotor(int rightMotorSpeed, int leftMotorSpeed)
   }
   analogWrite(enableRightMotor, abs(rightMotorSpeed));
   analogWrite(enableLeftMotor, abs(leftMotorSpeed));    
-}
--then learn to make simple line following robot with 5 IR through gemini and understand it
+}  
+## -then learn to make simple line following robot with 5 IR through gemini and understand it
   // --- Motor Control Pins (Adjust these for your specific driver/wiring) ---
 #define MOTOR_R_A 5  // Motor Right Direction Pin 1 (Digital or PWM)
 #define MOTOR_R_B 6  // Motor Right Direction Pin 2 (Digital or PWM)
@@ -259,6 +255,6 @@ void loop() {
     Serial.print(" | R_Speed: ");
     Serial.println(rightMotorSpeed);
     */
-}
--then make final bot
+}  
+## -then make final bot
   
