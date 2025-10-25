@@ -1,40 +1,38 @@
 # Line-Following-Bot
-my final line following bot not only walk on black with 5 IR sensors but also can detect junction and corner. It has PID control and weighted Error Calculations.
-#Journey Behind IT
-##for basic idea
--get to know about arduino and rsp32
-(https://www.canva.com/design/DAGx-6gTFAs/K8FZEMR6VaM--S2LGIcFcg/view?utm_content=DAGx-6gTFAs&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h53b6c2367f)
--know the basis of robots(sensor and motors):
-   https://www.youtube.com/watch?v=NRj6gzah7JA&list=PL4g1oAdmuCfqmYvURLzVFkMMUI7839biN&index=1&pp=iAQB
-   https://www.youtube.com/watch?v=pwwVOpXrazs&list=PL4g1oAdmuCfqmYvURLzVFkMMUI7839biN&index=2&pp=iAQB
-   https://www.youtube.com/watch?v=gizihSJ63o4&list=PL4g1oAdmuCfqmYvURLzVFkMMUI7839biN&index=3&pp=iAQB
-   https://www.youtube.com/watch?v=BnzUXag1qx8&list=PL4g1oAdmuCfqmYvURLzVFkMMUI7839biN&index=4&pp=iAQB
--know about micro-controllers, PCB, UARt in detail
-   https://www.canva.com/design/DAGx-6gTFAs/K8FZEMR6VaM--S2LGIcFcg/view?utm_content=DAGx6gTFAs&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h53b6c2367f
-   https://youtu.be/IyGwvGzrqp8?si=2z77m25CC4BParkK
--know about PID:
+my final line following bot not only walk on black with 5 IR sensors but also can detect junction and corner. It has PID control and weighted Error Calculations.  
+# Journey Behind IT  
+## for basic idea  
+-get to know about arduino and rsp32  
+(https://www.canva.com/design/DAGx-6gTFAs/K8FZEMR6VaM-S2LGIcFcg/viewutm_content=DAGx6gTFAs&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h53b6c2367f)  
+-know the basis of robots(sensor and motors):  
+   https://www.youtube.com/watch?v=NRj6gzah7JA&list=PL4g1oAdmuCfqmYvURLzVFkMMUI7839biN&index=1&pp=iAQB  
+   https://www.youtube.com/watch?v=pwwVOpXrazs&list=PL4g1oAdmuCfqmYvURLzVFkMMUI7839biN&index=2&pp=iAQB  
+   https://www.youtube.com/watch?v=gizihSJ63o4&list=PL4g1oAdmuCfqmYvURLzVFkMMUI7839biN&index=3&pp=iAQB  
+   https://www.youtube.com/watch?v=BnzUXag1qx8&list=PL4g1oAdmuCfqmYvURLzVFkMMUI7839biN&index=4&pp=iAQB  
+-know about micro-controllers, PCB, UARt in detail  
+   https://www.canva.com/design/DAGx-6gTFAs/K8FZEMR6VaM--S2LGIcFcg/view?utm _content=DAGx6gTFAs&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h53b6c2367f  
+   https://youtu.be/IyGwvGzrqp8?si=2z77m25CC4BParkK  
+   -know about PID:
     https://youtu.be/tFVAaUcOm4I?si=8vZWMEeyeW-29dxb
--know about PCBS
-   https://youtu.be/Z2LgmIGE2nI?si=HIU0AeMGXXB0Q6Lt
--How to code Arduino
-   https://youtu.be/zJ-LqeX_fLU?si=WDGOsD4ynYU08i4c
-#learn how to make line-following robot using 2 IR
-  and understand the code
-  #define IR_SENSOR_RIGHT 11
-#define IR_SENSOR_LEFT 12
-#define MOTOR_SPEED 180
+-know about PCBS  
+https://youtu.be/Z2LgmIGE2nI?si=HIU0AeMGXXB0Q6Lt  
+-How to code Arduino  
+https://youtu.be/zJ-LqeX_fLU?si=WDGOsD4ynYU08i4c  
+# learn how to make line-following robot using 2 IR  
+## and understand the code  
+#define IR_SENSOR_RIGHT 11  
+#define IR_SENSOR_LEFT 12  
+#define MOTOR_SPEED 180  
 
-//Right motor
-int enableRightMotor=6;
-int rightMotorPin1=7;
-int rightMotorPin2=8;
-
-//Left motor
-int enableLeftMotor=5;
-int leftMotorPin1=9;
-int leftMotorPin2=10;
-
-void setup()
+//Right motor  
+int enableRightMotor=6;  
+int rightMotorPin1=7;  
+int rightMotorPin2=8;  
+//Left motor  
+int enableLeftMotor=5;  
+int leftMotorPin1=9;  
+int leftMotorPin2=10;  
+void setup()  
 {
   //The problem with TT gear motors is that, at very low pwm value it does not even rotate.
   //If we increase the PWM value then it rotates faster and our robot is not controlled in that speed and goes out of line.
