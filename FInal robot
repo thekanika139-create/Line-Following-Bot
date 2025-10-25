@@ -89,7 +89,7 @@ long calculateError() {
       
     if (active_sensors == 0) {
        
-        return lastError > 0 ? 10 : -10; // Simple drift correction
+        return lastError > 0 ? 10 : -10;
     }
   
    if (active_sensors >= 4) {
@@ -166,7 +166,7 @@ void loop() {
    
     int leftSpeed = BASE_SPEED - steering;
     int rightSpeed = BASE_SPEED + steering;
-nt
+
     setMotors(leftSpeed, rightSpeed);
 
    
